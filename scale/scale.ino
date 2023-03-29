@@ -74,17 +74,16 @@ void loop() {
   float rawValue = analogRead(IN_PIN); //10 ADC
   //float rawT = analogRead(T_PIN); //10 ADC
   float vOut = rawValue * (5.0 / 1023.0);
-  vOut /= 5;
 
   // print values
   // Serial.print("Raw: ");
   // Serial.print(rawValue);  
-  if(vOut != 1 && n < NUM_SAMPLES)
+  if(vOut != 5 && n < NUM_SAMPLES)
   {
     // put volt to mass to equation here
-    mass = (-6.1950333551007 * pow(vOut, 3)) + (14.139004923926 * pow(vOut, 2)) - (11.018665454276 * vOut) + 3.11;  
-    mass = mass * 1000; //unnormalize mass   
-    // mass = map(vOut, 0, 5, 30, 1000);
+    //mass = pow(-11.99466834 * vOut + 62.0256739, 2);
+    mass = -45.33397014705 * pow(vOut, 4) + 667.0383726410 * pow(vOut, 3) - 3463.6843488301 * pow(vOut, 2) + 7012.5147149015 * vOut - 3470.1815571696;
+    // mass = map(vOut, 0, 5, 30, 1000); 
 
     if(n >= 0) {
       push(mass, samples);
@@ -94,7 +93,7 @@ void loop() {
       Serial.print("Ignoring... ");
     }
     Serial.print("vOut: ");
-    Serial.print(vOut * 5);
+    Serial.print(vOut);
     Serial.print(", Mass: ");
     Serial.print(mass);
 
@@ -110,7 +109,7 @@ void loop() {
 
     Serial.println();
   }
-  else if(vOut == 1)
+  else if(vOut == 5)
   {
     n = -1*NUM_TO_IGNORE;
     for(int i = 0; i < NUM_SAMPLES; i++) 
