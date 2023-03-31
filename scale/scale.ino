@@ -11,12 +11,20 @@ int LED_BLUE = 2;
 
 const int NUM_SAMPLES = 5;
 const int NUM_TO_IGNORE = 2;
-float samples[NUM_SAMPLES]; 
+float samples[NUM_SAMPLES];
+float v_samples[NUM_SAMPLES];
+
+float samples_new[NUM_SAMPLES];
+float samples_old[NUM_SAMPLES];
+
 int n = -1*NUM_TO_IGNORE;
+
+float mass_new = 0;
+float mass_old = 0;
 
 float mass = 0;
 
-// // mass(g) thresholds TBD at competition
+//mass(g) thresholds TBD at competition
 float redzone[2] = {30, 350};
 float greenzone[2] = {351, 670};
 float bluezone[2] = {671, 1000};           
@@ -42,7 +50,6 @@ void setup() {
   pinMode(LED_GREEN, OUTPUT);
   pinMode(LED_BLUE, OUTPUT);
   pinMode(IN_PIN, INPUT);    
-  //pinMode(T_PIN, INPUT);
   Serial.begin(9600);
   Serial.println("Scale initialized.\n");
 }
@@ -66,27 +73,22 @@ void selectLED(float mass)
 
 // the loop routine runs over and over again forever:
 void loop() {
-  // if(sample_count < 10) {
-  //   sample_count += 1; // ensures that the average for the first 10 samples is correct
-  // }
-
   // analog to digital conve  rsion
   float rawValue = analogRead(IN_PIN); //10 ADC
-  //float rawT = analogRead(T_PIN); //10 ADC
   float vOut = rawValue * (5.0 / 1023.0);
 
-  // print values
-  // Serial.print("Raw: ");
-  // Serial.print(rawValue);  
-  if(vOut != 5 && n < NUM_SAMPLES)
-  {
+  if(vOut != 5 && n < NUM_SAMPLES) {
     // put volt to mass to equation here
-    //mass = pow(-11.99466834 * vOut + 62.0256739, 2);
-    mass = -45.33397014705 * pow(vOut, 4) + 667.0383726410 * pow(vOut, 3) - 3463.6843488301 * pow(vOut, 2) + 7012.5147149015 * vOut - 3470.1815571696;
-    // mass = map(vOut, 0, 5, 30, 1000); 
+    mass = vOut
+    mass_new = vOut;
+    mass_old = vOut;
 
     if(n >= 0) {
       push(mass, samples);
+      push(vOut, v_samples);
+
+      push(mass_new, samples_new);
+      push(mass_old, samples_old);
     }
     else
     {
@@ -97,23 +99,35 @@ void loop() {
     Serial.print(", Mass: ");
     Serial.print(mass);
 
+    Serial.print(", New: ");
+    Serial.print(mass_new);
+    Serial.print(", Old: ");
+    Serial.print(mass_old);
+
     n++;
 
-    if(n == NUM_SAMPLES)
-    {
-      Serial.print("\nAVG MASS: ");
+    if(n == NUM_SAMPLES) {
+      Serial.print("\nAVG: ");
       Serial.print(mean(samples, n));
+
+      Serial.print("\nNEW: ");
+      Serial.print(mean(samples_new, n));
+      Serial.print("\nOLD: ");
+      Serial.print(mean(samples_new, n));
+      
+      Serial.print("\nV: ");
+      Serial.print(mean(v_samples, n));
+
       Serial.println();
       selectLED(mean(samples, n));
     }
 
     Serial.println();
   }
-  else if(vOut == 5)
-  {
+  else if(vOut == 5) {
     n = -1*NUM_TO_IGNORE;
-    for(int i = 0; i < NUM_SAMPLES; i++) 
-    {
+
+    for(int i = 0; i < NUM_SAMPLES; i++) {
       samples[i] = 0;
     }
 
@@ -122,6 +136,5 @@ void loop() {
     digitalWrite(LED_BLUE, LOW);
   }
 
-
-  delay(1000);
+  delay(500);
 }
