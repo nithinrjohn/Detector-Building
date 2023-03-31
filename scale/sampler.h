@@ -1,7 +1,6 @@
 /*
   Linn-Mar Science Olympiad Detector Building 2022 - 2023
 */
-#include "display.h"
 
 const int NUM_SAMPLES = 5;
 const int NUM_TO_IGNORE = 2;
@@ -39,29 +38,20 @@ void outputAvgMass() {
     if(n == NUM_SAMPLES)
     {
       float avg_m = mean(m_samples, n);
-      float avg_v = mean(v_samples, n);
       
       Serial.print("\nAVG MASS: ");
       Serial.print(avg_m);
 
-      displayMass(avg_m);
-
       selectLED(avg_m);
-    }
-}
 
-float outputAvgV() {
-    if(n == NUM_SAMPLES)
-    {
       float avg_v = mean(v_samples, n);
 
       Serial.print("\nAVG vOut: ");
       Serial.print(avg_v);
-      Serial.println();.
+      Serial.println();
 
-      return avg_v;
+      displayMass(avg_m, avg_v);
     }
-    return 0;
 }
 
 void clearSamples() {

@@ -2,12 +2,12 @@
   Linn-Mar Science Olympiad Detector Building 2022 - 2023
 */
 
-#include <Wire.h> 
+#include <Wire.h>
 #include <LiquidCrystal_I2C.h>
 
-const int LED_RED = 4;
-const int LED_GREEN = 3;
-const int LED_BLUE = 2;
+int LED_RED = 4;
+int LED_GREEN = 3;
+int LED_BLUE = 2;
 
 LiquidCrystal_I2C lcd(0x27, 2, 1, 0, 4, 5, 6, 7, 3, POSITIVE);
   
@@ -22,15 +22,15 @@ void initLED() {
   pinMode(LED_BLUE, OUTPUT);
 
   digitalWrite(LED_RED, HIGH);
-  delay(500);
+  delay(1000);
   digitalWrite(LED_RED, LOW);
 
   digitalWrite(LED_GREEN, HIGH);
-  delay(500);
+  delay(1000);
   digitalWrite(LED_GREEN, LOW);
   
   digitalWrite(LED_BLUE, HIGH);
-  delay(500);
+  delay(1000);
   digitalWrite(LED_BLUE, LOW);
 
 }
@@ -44,9 +44,12 @@ void initLCD() {
   lcd.print("Sci Oly - C17");
 }
 
-void displayMass(float mass) {
-  lcd.home ();
-  lcd.setCursor(3, 3);
+void displayMass(float mass, float vOut) {
+  lcd.home();
+  lcd.setCursor(2, 2);
+  lcd.print("vOut = ");
+  lcd.print(String(vOut));
+  lcd.setCursor(2, 3);
   lcd.print("Mass = ");
   lcd.print(String(mass));
 }
@@ -71,5 +74,8 @@ void clear() {
     digitalWrite(LED_RED, LOW);
     digitalWrite(LED_GREEN, LOW);
     digitalWrite(LED_BLUE, LOW);
-    lcd.clear();
+    lcd.setCursor(2, 2);
+    lcd.print("vOut = 0.0    ");
+    lcd.setCursor(2, 3);
+    lcd.print("Mass = 0.0    ");
 }
