@@ -46,10 +46,10 @@ void initLCD() {
 
 void displayMass(float mass, float vOut) {
   lcd.home();
-  lcd.setCursor(2, 2);
+  lcd.setCursor(4, 2);
   lcd.print("vOut = ");
   lcd.print(String(vOut));
-  lcd.setCursor(2, 3);
+  lcd.setCursor(4, 3);
   lcd.print("Mass = ");
   lcd.print(String(mass));
 }
@@ -74,8 +74,8 @@ void clear() {
     digitalWrite(LED_RED, LOW);
     digitalWrite(LED_GREEN, LOW);
     digitalWrite(LED_BLUE, LOW);
-    lcd.setCursor(2, 2);
+    lcd.setCursor(4, 2);
     lcd.print("vOut = 0.0    ");
-    lcd.setCursor(2, 3);
+    lcd.setCursor(4, 3);
     lcd.print("Mass = 0.0    ");
 }
