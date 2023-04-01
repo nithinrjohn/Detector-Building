@@ -2,17 +2,14 @@
   Linn-Mar Science Olympiad Detector Building 2022 - 2023
 */
 
+//these two header files are made to clean up code
+//display.h handles the LCD and LEDs
+//sampler.h handles the math for averaging readings
 #include "display.h"
 #include "sampler.h"
 
 // initialize Input Pin
 int IN_PIN = 0;
-
-// const float a = 0.463805;
-// const float b = 2.47632;
-// const float c = 1.77708;
-// const float d = 0.330908; 
-// const float e = 91.6197;
 
 const float a = 1.57152;
 const float b = -14.2523;
@@ -27,6 +24,7 @@ void setup() {
   Serial.begin(9600);
   Serial.println("Scale initialized.\n");
 
+  //initialize lcd and leds
   initLED();
   initLCD();
 }
@@ -37,27 +35,29 @@ void loop() {
   float rawValue = analogRead(IN_PIN); //10 ADC
   float vOut = rawValue * (5.0 / 1023.0);
 
-  //Serial.println("r: " + String{rawValue});
-
+  //if mass is place...
   if(vOut > 0.2 && n < NUM_SAMPLES) {
-    //volt to mass to equation
-    //float mass = a * pow(b, (c * vOut + d)) + e;
+    //convert volt to mass using the equation
     float mass = a * pow(vOut, 6) + b * pow(vOut, 5) + c * pow(vOut, 4) + d * pow(vOut, 2) + e * vOut + f;
 
+    //ignores the first few readings to compensate for extra mass of placer's hand
     ignoreSamples(mass, vOut);
 
     Serial.print("vOut: " + String(vOut) + ", Mass: " + String(mass));
 
     n++;
 
+    //outputs the avg mass and vOut and displays it
     outputAvgMass();
 
-    Serial.println();
+    Serial.println();    
   }
-  else if(vOut <= 0.2) {
+  //if mass is removed...
+  else if(vOut <= 0.2 && n == NUM_SAMPLES) {
     clearSamples();
     clear();
   }
+  //debug if output does not clear properly to tell user to reset arduino
   else if(vOut != 0)
   {
     Serial.println("v: " + String(vOut));

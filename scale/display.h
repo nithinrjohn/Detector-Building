@@ -2,6 +2,7 @@
   Linn-Mar Science Olympiad Detector Building 2022 - 2023
 */
 
+//librarys to run the LCD dispay board
 #include <Wire.h>
 #include <LiquidCrystal_I2C.h>
 
@@ -11,28 +12,28 @@ int LED_BLUE = 2;
 
 LiquidCrystal_I2C lcd(0x27, 2, 1, 0, 4, 5, 6, 7, 3, POSITIVE);
   
-// // mass(g) thresholds TBD at competition
+// mass(g) thresholds TBD at competition
 const float redzone[2] = {30, 350};
 const float greenzone[2] = {351, 670};
 const float bluezone[2] = {671, 1000};           
 
+//tests leds at init
 void initLED() {
   pinMode(LED_RED, OUTPUT);
   pinMode(LED_GREEN, OUTPUT);
   pinMode(LED_BLUE, OUTPUT);
 
   digitalWrite(LED_RED, HIGH);
-  delay(1000);
+  delay(500);
   digitalWrite(LED_RED, LOW);
 
   digitalWrite(LED_GREEN, HIGH);
-  delay(1000);
+  delay(500);
   digitalWrite(LED_GREEN, LOW);
   
   digitalWrite(LED_BLUE, HIGH);
-  delay(1000);
+  delay(500);
   digitalWrite(LED_BLUE, LOW);
-
 }
 
 void initLCD() {
@@ -71,11 +72,11 @@ void selectLED(float mass) {
 }
 
 void clear() {
-    digitalWrite(LED_RED, LOW);
-    digitalWrite(LED_GREEN, LOW);
-    digitalWrite(LED_BLUE, LOW);
     lcd.setCursor(4, 2);
     lcd.print("vOut = 0.0    ");
     lcd.setCursor(4, 3);
     lcd.print("Mass = 0.0    ");
+    digitalWrite(LED_RED, LOW);
+    digitalWrite(LED_GREEN, LOW);
+    digitalWrite(LED_BLUE, LOW);
 }
