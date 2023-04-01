@@ -1,5 +1,5 @@
 /*
-  Linn-Mar Science Olympiad Detector Building 2022 - 2023
+  Linn-Mar Science Olympiad Detector Building C17 2022 - 2023
 */
 
 //these two header files are made to clean up code
@@ -32,11 +32,11 @@ void setup() {
 // the loop routine runs over and over again forever:
 void loop() {
   // analog to digital conversion
-  float rawValue = analogRead(IN_PIN); //10 ADC
+  int rawValue = analogRead(IN_PIN); //10 ADC
   float vOut = rawValue * (5.0 / 1023.0);
 
   //if mass is place...
-  if(vOut > 0.2 && n < NUM_SAMPLES) {
+  if(vOut > 0.0 && n < NUM_SAMPLES) {
     //convert volt to mass using the equation
     float mass = a * pow(vOut, 6) + b * pow(vOut, 5) + c * pow(vOut, 4) + d * pow(vOut, 2) + e * vOut + f;
 
@@ -53,7 +53,7 @@ void loop() {
     Serial.println();    
   }
   //if mass is removed...
-  else if(vOut <= 0.2 && n == NUM_SAMPLES) {
+  else if(vOut <= 0.0) {
     clearSamples();
     clear();
   }
