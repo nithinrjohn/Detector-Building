@@ -14,7 +14,7 @@ int IN_PIN = 0;
 const float a = 1.57152;
 const float b = -14.2523;
 const float c = 39.8921;
-const float d = -154.994; 
+const float d = -154.994;
 const float e = 225.605;
 const float f = 0.482326;
 
@@ -32,11 +32,11 @@ void setup() {
 // the loop routine runs over and over again forever:
 void loop() {
   // analog to digital conversion
-  int rawValue = analogRead(IN_PIN); //10 ADC
+  int rawValue = analogRead(IN_PIN);  //10 ADC
   float vOut = rawValue * (5.0 / 1023.0);
 
-  //if mass is place...
-  if(vOut > 0.0 && n < NUM_SAMPLES) {
+  //if mass is placed...
+  if (vOut > 0.0 && n < NUM_SAMPLES) {
     //convert volt to mass using the equation
     float mass = a * pow(vOut, 6) + b * pow(vOut, 5) + c * pow(vOut, 4) + d * pow(vOut, 2) + e * vOut + f;
 
@@ -50,16 +50,15 @@ void loop() {
     //outputs the avg mass and vOut and displays it
     outputAvgMass();
 
-    Serial.println();    
+    Serial.println();
   }
   //if mass is removed...
-  else if(vOut <= 0.0) {
+  else if (vOut <= 0.0) {
     clearSamples();
     clear();
   }
   //debug if output does not clear properly to tell user to reset arduino
-  else if(vOut != 0)
-  {
+  else if (vOut != 0) {
     Serial.println("v: " + String(vOut));
   }
 
